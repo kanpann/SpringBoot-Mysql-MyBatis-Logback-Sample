@@ -8,7 +8,7 @@ implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
 
 # Mysql 설정 및 테스트
 ## 설정
-스키마명은 없을 경우 제외해도 됨.
+스키마명은 없을 경우 제외해도 됨.  
 ***main/resources/application.yml에 작성하기***
 ```yml
 spring:
