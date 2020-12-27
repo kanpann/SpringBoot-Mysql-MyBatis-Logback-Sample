@@ -4,6 +4,7 @@
 ```java
 implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.1.4'
 implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
+implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 ```
 
 # Mysql 설정 및 테스트
@@ -77,30 +78,60 @@ public class MyBatisConfig {
     </select>
 </mapper>
 ```
-
-## 테스트
-***/src/test/com/sample/app/db/ConnectionTests.java***
-```java
-@Slf4j
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
-public class ConnectionTests {
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
-
-    //...
-    @Test
-    public void 매퍼_테스트(){
-        try(SqlSession sqlSession = sqlSessionFactory.openSession()){
-            String sysdate = sqlSession.selectOne("test.selectTest");
-            log.info(sysdate);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-}
+# Logback 설정
+**/src/main/resources/** 경로에 파일 두개를 생성해주자.
+## *log4jdbc.log4j2.properties*
+```properties
+log4jdbc.spylogdelegator.name=net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+log4jdbc.dump.sql.maxlinelength=0
 ```
-# DAO 생성
+## *logback-spring.xml*
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--로그 파일 저장 위치-->
+    <property name="LOGS_PATH" value="./logs"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm} %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+    <appender name="DAILY_ROLLING_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_PATH}/logback.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_PATH}/logback.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>5MB</maxFileSize>
+                <!-- kb, mb, gb -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.nextday.gateway" level="INFO">
+        <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="DEBUG"/>
+    <logger name="jdbc.connection" level="OFF"/>
+</configuration>
+```
+# 최종 테스트
+설정이 모두 끝났으면 로그가 보기 좋게 콘솔에 찍히는 지를 확인해보자.
+## DAO 생성
 ***/src/main/com/sample/app/dao/TestDao.java***
 ```java
 @RequiredArgsConstructor
@@ -115,7 +146,7 @@ public class TestDao {
     }
 }
 ```
-## 테스트
+## DAO 테스트코드 작성 및 실행
 ```java
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
