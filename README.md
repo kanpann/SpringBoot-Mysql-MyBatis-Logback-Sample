@@ -2,7 +2,7 @@
 # 의존성을 추가
 ## Gradle
 ```java
-implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.1.4'
+implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter'
 implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
 implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 ```
@@ -113,7 +113,7 @@ log4jdbc.dump.sql.maxlinelength=0
         </rollingPolicy>
     </appender>
 
-    <logger name="com.nextday.gateway" level="INFO">
+    <logger name="com.sample.app" level="INFO">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
     </logger>
     <root level="INFO">
