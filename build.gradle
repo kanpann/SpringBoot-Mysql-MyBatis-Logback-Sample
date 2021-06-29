@@ -32,7 +32,7 @@ dependencies {
     implementation group: 'org.projectlombok', name: 'lombok'
     annotationProcessor group: 'org.projectlombok', name: 'lombok'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter'
+    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.0'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
     implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 }
