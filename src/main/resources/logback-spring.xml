@@ -24,7 +24,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.nextday.gateway" level="INFO">
+    <logger name="com.sample.app" level="INFO">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
     </logger>
     <root level="INFO">
