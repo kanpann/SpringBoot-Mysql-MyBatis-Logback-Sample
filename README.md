@@ -2,7 +2,7 @@
 # 의존성을 추가
 ## Gradle
 ```java
-implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter'
+implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.0'
 implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
 implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 ```
